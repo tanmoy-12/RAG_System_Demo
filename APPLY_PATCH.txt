@@ -1,0 +1,30 @@
+THE RELAY — RELAXED SECTION-LEVEL CITATION PATCH
+
+Copy these files into the matching folders in your existing RAG_System project,
+overwriting the files:
+  relay_rag/citations.py
+  relay_rag/pipeline.py
+  tests/test_citations.py
+
+New policy:
+- Invalid paper/page citations remain a hard failure.
+- Every substantive logical section must contain at least one valid citation.
+- A section may contain multiple paragraphs, bullets and equations.
+- Markdown headings and bold/italic labels start a new section.
+- Answers without headings are treated as one logical section.
+- Uncited factual sections are still rejected.
+- This is citation-location validation, not semantic entailment verification.
+
+Run:
+  python -m compileall -q relay_rag tests
+  python -m unittest discover -s tests -v
+
+Expected: 24 tests pass.
+
+IMPORTANT FINDING FROM YOUR UPLOADED TEST CSVs:
+- The 34-row run contains 24 rate_limited rows (Groq provider 429).
+- The 5-row smoke run contains 3 rate_limited rows.
+- These requests did not complete model generation and therefore were not
+  rejected by citation validation. A citation patch cannot fix provider 429s.
+- Run only a small real-model batch after the provider reset, with a pause
+  between requests. Preserve rate_limited rows as provider outcomes.

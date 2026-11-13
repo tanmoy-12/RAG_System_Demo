@@ -1,0 +1,13 @@
+The Relay - display-math citation fix
+
+1. Extract this ZIP into your existing RAG_System project root.
+2. Allow relay_rag/citations.py, relay_rag/pipeline.py, tests/test_citations.py, and CITATION_VALIDATION_FIX.md to be overwritten.
+3. Do not replace or delete your .env, downloaded PDFs, or data/indexes.
+4. Run:
+   python -m compileall -q relay_rag tests
+   python -m unittest discover -s tests -v
+5. Expected result: 23 tests pass.
+6. Test again:
+   python -m relay_rag.cli "How does scaled dot-product attention work?"
+
+Citation rule: a display equation needs a citation in the same block or in a citation-only paragraph immediately after it. The citation still must match a retrieved paper/page pair. Uncited equations and non-retrieved citations are rejected.
